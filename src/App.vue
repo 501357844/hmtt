@@ -5,15 +5,12 @@
 </template>
 
 <script>
-
-
 export default {
-  name: 'app',
-  components: {
-  }
+  name: 'app'
+
 }
 </script>
 
-<style>
+<style lang='less'>
 
 </style>
