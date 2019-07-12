@@ -2,12 +2,12 @@
   <div class="login-container">
     <el-card class="login-box">
       <img src="../../assets/images/logo_index.png" />
-      <el-form>
-        <el-form-item>
-          <el-input placeholder="请输入手机号"></el-input>
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" status-icon>
+        <el-form-item prop='mobile'>
+          <el-input v-model="ruleForm.mobile"></el-input>
         </el-form-item>
-        <el-form-item>
-          <el-input placeholder="验证码" style="width:280px"></el-input>
+        <el-form-item prop='code'>
+          <el-input style="width:280px" v-model="ruleForm.code"></el-input>
           <el-button style="float:right">发送验证码</el-button>
         </el-form-item>
         <el-form-item>
@@ -16,7 +16,7 @@
           <el-link type="primary">隐私条款</el-link>
         </el-form-item>
         <el-form-item>
-          <el-button style="width:100%" type="primary">登陆</el-button>
+          <el-button style="width:100%" type="primary" @click='submitForm()'>登陆</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -26,8 +26,48 @@
 <script>
 export default {
   data () {
+    const checkMobile = (rule, value, callback) => {
+      if (/^1[3-9]\d{9}$/.test(value)) {
+        callback()
+      } else {
+        callback(new Error('手机号格式不对'))
+      }
+    }
     return {
-      checked: true
+      checked: true,
+      ruleForm: {
+        mobile: '18526079668',
+        code: '246810'
+      },
+      rules: {
+        mobile: [
+          { required: true, message: '请输入有效手机号', trigger: 'blur' },
+          { validator: checkMobile, trigger: 'blur' }
+        ],
+        code: [
+          { required: true, message: '请输入有效验证码', trigger: 'blur' },
+          { len: 6, message: '必须是6位', trigger: 'blur' }
+        ]
+      }
+    }
+  },
+  methods: {
+    submitForm () {
+      this.$refs.ruleForm.validate((valid) => {
+        if (valid) {
+          this.axios
+            .post('http://ttapi.research.itcast.cn/mp/v1_0/authorizations', this.ruleForm)
+            .then((res) => {
+              const data = res.data
+              console.log(data)
+              this.$router.push('/')
+            })
+            .catch((err) => {
+              console.log(err)
+              this.$message.error('用户名或验证码错误')
+            })
+        }
+      })
     }
   }
 }
