@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { async } from 'q'
 export default {
   data () {
     const checkMobile = (rule, value, callback) => {
@@ -53,19 +54,31 @@ export default {
   },
   methods: {
     submitForm () {
-      this.$refs.ruleForm.validate((valid) => {
+      // this.$refs.ruleForm.validate((valid) => {
+      //   if (valid) {
+      //     this.axios
+      //       .post('authorizations', this.ruleForm)
+      //       .then((res) => {
+      //         const data = res.data
+      //         console.log(data)
+      //         window.sessionStorage.setItem('hmtt', JSON.stringify(res.data.data))
+      //         this.$router.push('/')
+      //       })
+      //       .catch((err) => {
+      //         console.log(err)
+      //         this.$message.error('用户名或验证码错误')
+      //       })
+      //   }
+      // })
+      this.$refs.ruleForm.validate(async valid => {
         if (valid) {
-          this.axios
-            .post('http://ttapi.research.itcast.cn/mp/v1_0/authorizations', this.ruleForm)
-            .then((res) => {
-              const data = res.data
-              console.log(data)
-              this.$router.push('/')
-            })
-            .catch((err) => {
-              console.log(err)
-              this.$message.error('用户名或验证码错误')
-            })
+          try {
+            const res = await this.axios.post('authorizations', this.ruleForm)
+            window.sessionStorage.setItem('hmtt', JSON.stringify(res.data.data))
+            this.$router.push('/')
+          } catch (err) {
+            this.$message.err('用户名或验证码错误')
+          }
         }
       })
     }

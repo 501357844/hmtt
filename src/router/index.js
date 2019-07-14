@@ -9,6 +9,7 @@ import Image from '@/views/image'
 import Push from '@/views/push'
 import Setting from '@/views/setting'
 import Container from '@/views/container'
+import NotFound from '@/views/404'
 
 Vue.use(VueRouter)
 // 配置路由对象
@@ -18,7 +19,7 @@ const router = new VueRouter({
     { path: '/',
       component: Home,
       children: [
-        { name: 'Welcome', path: '', component: Welcome },
+        { name: 'Welcome', path: '/', component: Welcome },
         { name: 'Comment', path: '/comment', component: Comment },
         { name: 'Fans', path: '/fans', component: Fans },
         { name: 'Image', path: '/image', component: Image },
@@ -26,9 +27,23 @@ const router = new VueRouter({
         { name: 'Setting', path: '/setting', component: Setting },
         { name: 'Container', path: '/container', component: Container }
 
-      ] }
+      ] },
+    { path: '*', name: '404', component: NotFound }
 
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  console.log('ok')
+  if (to.path === '/login') return next()
+  const user = window.sessionStorage.getItem('hmtt')
+  if (user) {
+    next()
+  } else {
+    next('/login')
+  }
+  // if (to.path !== '/login' && !user) return next('/login')
+  // next()
 })
 
 export default router

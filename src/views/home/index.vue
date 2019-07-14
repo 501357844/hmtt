@@ -4,7 +4,7 @@
       <div class="logo" :class="{close:collapse}"></div>
       <el-menu
         router
-        default-active="/"
+        :default-active="$route.path"
         style="border-right:none"
         background-color="#002033"
         text-color="#fff"
@@ -58,9 +58,9 @@
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown" class="liclass">
-            <el-dropdown-item class="el-icon-setting">个人设置</el-dropdown-item>
+            <el-dropdown-item class="el-icon-setting" @click.native="setting()">个人设置</el-dropdown-item>
             <br />
-            <el-dropdown-item class="el-icon-unlock">退出登录</el-dropdown-item>
+            <el-dropdown-item class="el-icon-unlock" @click.native="logout()">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-header>
@@ -76,12 +76,26 @@
 export default {
   data () {
     return {
-      collapse: false
+      collapse: false,
+      name: '',
+      avatar: ''
     }
+  },
+  created () {
+    const user = window.sessionStorage.getItem('hmtt')
+    this.name = user.name
+    this.avatar = user.avatar
   },
   methods: {
     toggleMenu () {
       this.collapse = !this.collapse
+    },
+    setting () {
+      this.$router.push('/setting')
+    },
+    logout () {
+      window.sessionStorage.removeItem('hmtt')
+      this.$router.push('/login')
     }
   }
 }
