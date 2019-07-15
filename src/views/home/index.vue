@@ -49,12 +49,13 @@
         <el-dropdown style="float:right" >
           <span class="el-dropdown-link">
               <img
-                src="../../assets/images/avatar.jpg"
                 width="30px"
                 height="30px"
                 style="vertical-align:middle"
+                :src="avatar"
+                alt
               />
-            <b style="vertical-align:middle;padding-left:5px">黑马小哥</b>
+            <b style="vertical-align:middle;padding-left:5px">{{name}}</b>
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown" class="liclass">
@@ -82,9 +83,9 @@ export default {
     }
   },
   created () {
-    const user = window.sessionStorage.getItem('hmtt')
+    const user = JSON.parse(window.sessionStorage.getItem('hmtt'))
     this.name = user.name
-    this.avatar = user.avatar
+    this.avatar = user.photo
   },
   methods: {
     toggleMenu () {

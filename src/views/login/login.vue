@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { async } from 'q'
+
 export default {
   data () {
     const checkMobile = (rule, value, callback) => {
