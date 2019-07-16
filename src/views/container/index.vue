@@ -16,7 +16,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="频道：">
-           <!-- <my-channel v-model="reqParams.channel_id"></my-channel> -->
+          <my-channel v-model="reqParams.channel_id"></my-channel>
         </el-form-item>
         <el-form-item label="时间：">
           <el-date-picker
@@ -31,6 +31,7 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="search()">筛选</el-button>
+          <el-button type="warning" @click="rest()">重置</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -75,7 +76,7 @@
           background
           layout="prev, pager, next"
           @current-change="changePager"
-          :current-page ="reqParams.page"
+          :current-page="reqParams.page"
           :page-size="reqParams.per_page"
           :total="total"
         ></el-pagination>
@@ -85,10 +86,8 @@
 </template>
 
 <script>
-import MyBread from '@/components/breadcrumb.vue'
-
 export default {
-  components: { MyBread },
+  inject: ['reload'],
   data () {
     return {
       // 提交给后台的筛选条件  传参
@@ -112,7 +111,9 @@ export default {
   // 获取频道数据
   created () {
     this.getArticles()
+    //
   },
+
   methods: {
     edit (id) {
       // this.$router.push('/push')
@@ -145,16 +146,23 @@ export default {
       this.reqParams.page = 1
       this.getArticles()
     },
+    rest () {
+      this.getrest()
+    },
     changeDate (values) {
       this.reqParams.begin_pubdate = values[0]
       this.reqParams.end_pubdate = values[1]
     },
+    // 获取文章列表
     async getArticles () {
       const {
         data: { data }
       } = await this.axios.get('articles', { params: this.reqParams })
       this.articles = data.results
       this.total = data.total_count
+    },
+    getrest () {
+      this.reload()
     }
   }
 }
