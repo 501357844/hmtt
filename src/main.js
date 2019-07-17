@@ -9,6 +9,7 @@ import router from './router/index'
 
 import axios from '@/Api/axios'
 import compotents from '@/components'
+import '@/style/index.less'
 
 Vue.use(compotents)
 Vue.prototype.axios = axios
