@@ -1,10 +1,13 @@
 <template>
   <div class="push-container">
-    <el-card>
       <div slot="header">
         <my-bread>发布文章</my-bread>
       </div>
-    </el-card>
+      <el-form :model="articleForm" label-width="100px">
+        <el-form-item label="标题:">
+          <el-input v-model="articleForm.title"></el-input>
+        </el-form-item>
+      </el-form>
   </div>
 </template>
 

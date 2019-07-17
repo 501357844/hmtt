@@ -98,7 +98,7 @@ export default {
         this.getImages()
       })
       .catch(() => {
-        
+
       })
       },
     async toggleFav(item) {
@@ -181,4 +181,3 @@ export default {
   }
 }
 </style>
-
